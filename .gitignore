@@ -1,0 +1,14 @@
+# Ignore build artifacts
+*.o
+*.a
+*.out
+fuzz_example
+test_example
+
+# Ignore directories
+build/
+debug/
+release/
+
+# Ignore system files
+.DS_Store

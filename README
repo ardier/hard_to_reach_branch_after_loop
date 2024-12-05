@@ -1,0 +1,15 @@
+# Hard to Reach Branch After Loop
+
+This project demonstrates a logic where a hard-to-reach branch occurs after a loop. It includes core logic as well as a fuzzing harness.
+
+## Features
+
+- **Core Logic**: Encapsulated in `src/example.cpp` and `src/example.hpp`.
+- **Static Library**: Buildable via the included `Makefile`.
+- **Test Binary**: `test_example` for manual testing.
+
+## Build Instructions
+
+1. **Build All Targets**:
+   ```bash
+   make
