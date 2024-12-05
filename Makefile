@@ -1,43 +1,34 @@
-# Dynamically determine llvm-config and clang++ paths
-LLVM_CONFIG = $(shell which llvm-config)
-CLANG_PATH = $(shell $(LLVM_CONFIG) --bindir)/clang++
-
 # Compiler and flags
-CXX = $(CLANG_PATH)
+CXX = g++
 CXXFLAGS = -g -O1 -std=c++17
 
-# Dynamically inferred include and library paths
-INCLUDES = -I$(shell $(LLVM_CONFIG) --includedir)/c++/v1
-LIBDIRS = -L$(shell $(LLVM_CONFIG) --libdir)
-
-# Add libc++ standard library
-STD_LIB = -stdlib=libc++
-
-# Source files and targets
+# Directories
 SRC_DIR = src
-SRC_FILES = $(SRC_DIR)/example.cpp
-HEADER_FILES = $(SRC_DIR)/example.hpp
-OBJ_FILES = $(SRC_FILES:.cpp=.o)
+OBJ_DIR = obj
 
+# Files
 LIB_NAME = libexample.a
-TEST_BINARY = test_example
-TEST_SOURCE = $(SRC_DIR)/test_example.cpp
+PROGRAM_NAME = test_program
+
+# Source and object files
+SRC_FILES = $(SRC_DIR)/example.cpp $(SRC_DIR)/test_example.cpp
+OBJ_FILES = $(OBJ_DIR)/example.o $(OBJ_DIR)/test_example.o
 
 # Default target
-all: $(LIB_NAME) $(TEST_BINARY)
+all: $(PROGRAM_NAME)
 
 # Build the static library
-$(LIB_NAME): $(OBJ_FILES)
-	ar rcs $@ $^
+$(LIB_NAME): $(OBJ_DIR)/example.o
+	ar rcs $@ $<
 
 # Compile source files into object files
-%.o: %.cpp $(HEADER_FILES)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Build the test binary
-$(TEST_BINARY): $(TEST_SOURCE) $(LIB_NAME)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(LIBDIRS) $(STD_LIB) -o $@ $^ -L.
+# Build the final program
+$(PROGRAM_NAME): $(LIB_NAME) $(OBJ_DIR)/test_example.o
+	$(CXX) $(CXXFLAGS) $(OBJ_DIR)/test_example.o -L. -lexample -o $@
 
 # Clean up generated files
 clean:
-	rm -f $(OBJ_FILES) $(LIB_NAME) $(TEST_BINARY)
+	rm -f $(OBJ_DIR)/*.o $(LIB_NAME) $(PROGRAM_NAME)
