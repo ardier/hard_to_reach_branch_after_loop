@@ -27,8 +27,12 @@ all: $(PROGRAM_NAME)
 $(LIB_NAME): $(OBJ_DIR)/example.o
 	ar rcs $@ $<
 
+# Ensure the OBJ_DIR exists
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
 # Compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Build the final program
