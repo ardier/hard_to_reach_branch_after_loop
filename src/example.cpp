@@ -1,7 +1,7 @@
-#include "example.hpp"
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <cstdlib> // Use for std::atoi instead of std::stoi
 
 void processInput(const std::string &input) {
     try {
@@ -11,15 +11,18 @@ void processInput(const std::string &input) {
         }
 
         // Parse input as a comma-separated pair of integers
-        std::istringstream input_stream(input);
-        std::string y_str, x_str;
-
-        if (!std::getline(input_stream, y_str, ',') || !std::getline(input_stream, x_str)) {
+        std::size_t comma_pos = input.find(',');
+        if (comma_pos == std::string::npos) {
             return;
         }
 
-        int y = std::stoi(y_str);
-        int x = std::stoi(x_str);
+        // Extract y and x as substrings
+        std::string y_str = input.substr(0, comma_pos);
+        std::string x_str = input.substr(comma_pos + 1);
+
+        // Convert y and x to integers using std::atoi
+        int y = std::atoi(y_str.c_str());
+        int x = std::atoi(x_str.c_str());
 
         // Simulate some processing logic
         int result = 0;
@@ -36,7 +39,7 @@ void processInput(const std::string &input) {
         } else {
             std::cout << "result is not divisible by 9345349" << std::endl;
         }
-    } catch (const std::exception &e) {
-        // Catch and ignore exceptions
+    } catch (...) {
+        // Catch any exceptions and ignore
     }
 }

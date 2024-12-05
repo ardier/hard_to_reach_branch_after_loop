@@ -2,6 +2,12 @@
 CXX = g++
 CXXFLAGS = -g -O1 -std=c++17
 
+# # Dynamically locate the __config_site directory
+# CONFIG_SITE_DIR := $(shell find $$(llvm-config --prefix) -name "__config_site" 2>/dev/null | xargs -r dirname | head -n 1)
+
+# # Add the __config_site directory to include paths
+# CXXFLAGS += -I$(CONFIG_SITE_DIR)
+
 # Directories
 SRC_DIR = src
 OBJ_DIR = obj
