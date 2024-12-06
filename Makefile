@@ -1,8 +1,3 @@
-# Default Compiler and flags (can be overridden)
-CXX ?= clang++
-CC ?= clang
-LD ?= clang++
-CXXFLAGS ?= -g -O1 -std=c++17 -stdlib=libc++
 
 # Directories
 SRC_DIR = src
