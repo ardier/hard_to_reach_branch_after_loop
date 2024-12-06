@@ -1,6 +1,8 @@
-# Compiler and flags
-CXX = clang++
-CXXFLAGS = -g -O1 -std=c++17 -stdlib=libc++
+# Compiler, Linker, and flags from the environment (with defaults)
+CXX ?= clang++
+CC ?= clang
+LD ?= clang++
+CXXFLAGS ?= -g -O1 -std=c++17 -stdlib=libc++
 
 # Directories
 SRC_DIR = src
@@ -15,7 +17,7 @@ SRC_FILES = $(SRC_DIR)/example.cpp $(SRC_DIR)/test_example.cpp
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_FILES:.cpp=.o)))
 
 # Default target
-all: $(LIB_NAME)
+all: $(LIB_NAME) $(PROGRAM_NAME)
 
 # Build the static library
 $(LIB_NAME): $(OBJ_DIR)/example.o
@@ -25,6 +27,10 @@ $(LIB_NAME): $(OBJ_DIR)/example.o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Build the final program
+$(PROGRAM_NAME): $(LIB_NAME) $(OBJ_FILES)
+	$(LD) $(CXXFLAGS) $(OBJ_DIR)/test_example.o -L. -lexample -o $@
 
 # Clean up generated files
 clean:
